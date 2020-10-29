@@ -1,18 +1,19 @@
-var webpack = require('webpack');
 module.exports = {
-  filenameHashing: false,
-  configureWebpack: {
-    plugins: [
-      new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 1
-      })
+  "filenameHashing": false,
+  "configureWebpack": {
+    "plugins": [
+      {
+        "options": {
+          "maxChunks": 1
+        }
+      }
     ]
   },
-  css: {
-    extract: false
+  "css": {
+    "extract": false
   },
-
-  lintOnSave: false,
-
-
+  "lintOnSave": false,
+  "transpileDependencies": [
+    "vuetify"
+  ]
 }
