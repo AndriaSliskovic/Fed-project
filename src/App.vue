@@ -1,19 +1,30 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <div id="app">Pocetna strana : {{dataObject}}</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  data() {
+    return {
+      apiPoint: process.env.VUE_APP_API_URL,
+      dataObject:{}
+    }
+  },
+  components: {},
+  created(){
+this.getDataFromApi()
+
+  },
+  methods: {
+    getDataFromApi() {
+this.axios.get(this.apiPoint).then((response) => {
+  this.dataObject=response.data
+})
+    }
+  },
+};
 </script>
 
 <style>
