@@ -1,19 +1,34 @@
+var webpack = require('webpack');
 module.exports = {
-  "filenameHashing": false,
-  "configureWebpack": {
-    "plugins": [
-      {
-        "options": {
-          "maxChunks": 1
-        }
-      }
+  filenameHashing: false,
+  configureWebpack: {
+    plugins: [
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1
+      })
     ]
   },
-  "css": {
-    "extract": false
+  css: {
+    extract: false
   },
-  "lintOnSave": false,
   "transpileDependencies": [
     "vuetify"
-  ]
+  ],
+  lintOnSave: false,
+  chainWebpack: config => {
+    config.module
+      .rule('vue')
+      .use('vue-loader')
+        .loader('vue-loader')
+        .tap(options => {
+          // modify the options...
+          return options
+        })
+  
+    config.module.rule('pdf')
+      .test(/\.pdf$/)
+      .use('file-loader').loader('file-loader')
+
+  }
+
 }
