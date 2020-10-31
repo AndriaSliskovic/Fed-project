@@ -4,7 +4,6 @@
       <v-container>
         <v-col cols="12" id="select_contract">
           <v-row justify="end">
-            
             <v-col cols="4" id="select_contract_length" v-if="loaded">
               <v-select
                 :items="dataObject.contract_length.contract_length_options"
@@ -25,34 +24,52 @@
               class="px-4 my-0"
             >
               <v-card color="secondary">
-                <v-card-text>
-                <v-row justify="center"> Promocija </v-row>
-                <v-row>
-                  <v-col cols="12">
-                    <v-row justify="center"> NAslov </v-row>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="6"> Ikonica </v-col>
-                  <v-col cols="6"> Sadrzaj 2 </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="6"> televizor </v-col>
-                  <v-col cols="6"> Sadrzaj 2 </v-col>
-                </v-row>
-                                <v-row>
-                  <v-col cols="12"> Cena </v-col>
-                  <v-col cols="12"> Period </v-col>
-                </v-row>
+                <v-card-text id="featured">
+                  <v-row justify="center" v-if="item.is_featured">
+                    Promocija
+                  </v-row>
+                  <v-row id="name">
+                    <v-col cols="12">
+                      <v-row justify="center"> {{ item.name }} </v-row>
+                    </v-col>
+                  </v-row>
+                  <v-row id="included" align="center">
+                    <v-col cols="4">
+                      <v-row align="center"> Ikonica </v-row>
+                    </v-col>
+                    <v-col cols="8">
+                      <v-list-item dense v-for="i in item.included" :key="i.id">
+                        <v-list-item-content>
+                          {{ i.long_name }}
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                  </v-row>
+                  <v-row id="promotions">
+                    <v-col cols="4"> 
+                      <v-row justify="start">
+televizor
+                      </v-row>
+                       </v-col>
+                    <v-col cols="8"> 
+                      <v-row justify="center">
+{{item.promotions[0].promo_text}}
+                      </v-row>
+                       </v-col>
+                  </v-row>
+                  <v-row id="prices">
+                    <v-row>
+                    <v-col cols="6"> {{item.prices.old_price_recurring}} </v-col>
+                    <v-col cols="6"> {{item.prices.price_recurring}} </v-col>
+                    </v-row>
+
+                  </v-row>
                 </v-card-text>
                 <v-card-actions>
                   <v-row justify="center">
-<v-btn color="primary" @click="testIt">Narucite</v-btn>
+                    <v-btn color="primary" @click="testIt">Narucite</v-btn>
                   </v-row>
-
                 </v-card-actions>
-
-
               </v-card>
 
               <v-divider></v-divider>
