@@ -1,60 +1,59 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <HelloWorld/>
-    </v-main>
+    <v-container fluid>
+      <v-row>
+        <v-col cols="12">
+          <v-row justify="end">
+            <v-btn color="primary" @click="testIt">Klik</v-btn>
+            <v-col cols="4" id="select_contract_length" v-if="loaded">
+              <v-select
+                :items="dataObject.contract_length.contract_length_options"
+                dense
+                solo
+                v-model="dataObject.contract_length.preselected_contract_length"
+              ></v-select>
+            </v-col>
+          </v-row>
+        </v-col>
+        <v-col cols="12">
+          <v-row id="main" ref="main"> </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
-
 export default {
-  name: 'App',
-
-  components: {
-    HelloWorld,
+  name: "App",
+  data() {
+    return {
+      apiPoint: process.env.VUE_APP_API_URL,
+      dataObject: {},
+      loaded: false,
+      //isFeaturedOfset:0
+    };
   },
-
-  data: () => ({
-    //
-  }),
+  components: {},
+  created() {
+    this.getDataFromApi();
+  },
+  methods: {
+    testIt() {
+      console.log("test");
+    },
+    getDataFromApi() {
+      this.axios
+        .get(this.apiPoint)
+        .then((response) => {
+          this.dataObject = response.data;
+        })
+        .then(() => {
+          this.loaded = true;
+        });
+    },
+    setFeaturedOfset() {},
+  },
+  computed: {},
 };
 </script>
