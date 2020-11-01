@@ -29,9 +29,15 @@
               <v-card color="secondary" outlined flat>
                 <v-card-text>
                   <!-- Preporuka -->
-                  <v-row justify="center" v-if="item.is_featured">
+                  <v-row justify="center" v-if="item.is_featured" no-gutters>
                     <v-col cols="12">
-                      <v-row justify="center"> Promocija </v-row>
+                      <v-row justify="center">
+                        <p
+                          class="subtitle-1 purple--text text-darken-2 font-weight-bold"
+                        >
+                          Preporučujemo
+                        </p>
+                      </v-row>
                     </v-col>
                   </v-row>
                   <v-divider></v-divider>
@@ -51,35 +57,57 @@
                   </v-row>
                   <v-divider></v-divider>
                   <!--  // Title -->
-                  <!-- Categories -->
-                  <v-row id="included" align="center">
+                  <!-- TV category -->
+                  <v-row id="includedTv" align="center">
                     <v-col cols="4">
-                      <v-row align="center" justify="center">
-                        <v-col cols="12">
-                          <v-avatar>
-                            <img :src="tvCategory" alt="tv_category" />
-                          </v-avatar>
-                        </v-col>
-                        <v-col cols="12">
-                          <v-avatar>
-                            <img :src="netCategory" alt="net_category" />
-                          </v-avatar>
-                        </v-col>
+                      <v-row justify="center">
+                        <v-avatar>
+                          <img :src="tvCategory" alt="tv_category" />
+                        </v-avatar>
                       </v-row>
                     </v-col>
                     <v-col cols="8">
-                      <v-list-item dense v-for="i in item.included" :key="i.id">
-                        <v-list-item-content>
-                          {{ i.long_name }}
-                        </v-list-item-content>
-                      </v-list-item>
+                      <template v-for="i in item.included">
+                        <v-col
+                          cols="12"
+                          :key="i.id"
+                          v-if="i.product_category == 'tv'"
+                          class="pa-0"
+                        >
+                          <p v-html="i.long_name" />
+                        </v-col>
+                      </template>
                     </v-col>
                   </v-row>
                   <v-divider></v-divider>
-                  <!--// Categories -->
+                  <!--// TV category -->
+                  <!-- Net category -->
+                  <v-row id="includedNet" align="center">
+                    <v-col cols="4">
+                      <v-row justify="center">
+                        <v-avatar>
+                          <img :src="netCategory" alt="tv_category" />
+                        </v-avatar>
+                      </v-row>
+                    </v-col>
+                    <v-col cols="8">
+                      <template v-for="i in item.included">
+                        <v-col
+                          cols="12"
+                          :key="i.id"
+                          v-if="i.product_category == 'net'"
+                          class="pa-0"
+                        >
+                          <p v-html="i.long_name" />
+                        </v-col>
+                      </template>
+                    </v-col>
+                  </v-row>
+                  <v-divider></v-divider>
+                  <!-- // Net category -->
                   <!-- Promotions -->
                   <v-row id="promotions" no-gutters align="center">
-                    <v-col cols="3" class="pl-3">
+                    <v-col cols="4" class="pa-3">
                       <v-row justify="center">
                         <v-img
                           lazy-src="https://picsum.photos/id/11/10/6"
@@ -87,11 +115,11 @@
                         ></v-img>
                       </v-row>
                     </v-col>
-                    <v-col cols="9">
+                    <v-col cols="8">
                       <v-row justify="center">
                         <span
                           v-html="item.promotions[0].promo_text"
-                          class="purple--text text-darken-2 font-italic"
+                          class="purple--text text-darken-2 font-italic font-weight-medium"
                         ></span>
                       </v-row>
                     </v-col>
@@ -101,26 +129,37 @@
                   <v-row>
                     <template v-for="(price, key) in item.prices">
                       <template v-for="(p, k) in price">
-                        <v-col cols="6" v-if="k == selectedOption" :key="k">
+                        <v-col
+                          :cols="p != '' ? 6 : 12"
+                          v-if="k == selectedOption"
+                        >
                           <v-row justify="center" no-gutters>
                             <p
                               class="text-h6 purple--text text-darken-2 font-weight-bold mb-0"
                             >
-                              <span v-if="key == 'old_price_recurring'">
+                              <span
+                                v-if="key == 'old_price_recurring' && p != ''"
+                              >
                                 <span class="text-decoration-line-through"
                                   >{{ formatPrice(p) }}
                                 </span>
-                                rsd/mes
+                                rsd/mes1
                               </span>
-                              <span v-else>{{ formatPrice(p) }} rsd/mes</span>
+                              <span v-if="key == 'price_recurring'"
+                                >{{ formatPrice(p) }} rsd/mes</span
+                              >
                             </p>
                           </v-row>
                         </v-col>
                       </template>
                     </template>
-                    <v-row justify="center" no-gutters>
+
+                      <v-col cols="12">
+                                            <v-row justify="center" no-gutters>
                       <span v-html="item.prices.old_price_promo_text"></span>
-                    </v-row>
+                                          </v-row>
+                      </v-col>
+
                   </v-row>
                   <!-- // Prices -->
                 </v-card-text>
@@ -151,6 +190,7 @@ export default {
       dataObject: {},
       loaded: false,
       selectedOption: null,
+      konRez: null,
       //isFeaturedOfset:0
     };
   },
@@ -165,23 +205,7 @@ export default {
   // },
   methods: {
     testIt() {
-      const items = this.dataObject.items;
-      const arr = [];
-      items.forEach((el) => {
-        const obj = {};
-        for (const key in el.prices) {
-          const element = el.prices[key];
-          if (typeof element[this.selectedOption] != "undefined") {
-            console.log("ima undefine", key);
-
-            const formatedPrice = element[this.selectedOption].split(".")[0];
-            console.log("formated", formated);
-            this.$set(obj, key, formated);
-          }
-        }
-        arr.push(obj);
-      });
-      console.log("niz", arr);
+      this.formatToStrong();
     },
     getDataFromApi() {
       this.axios
@@ -191,11 +215,21 @@ export default {
         })
         .then(() => {
           this.selectedOption = this.dataObject.contract_length.preselected_contract_length;
+          this.formatToStrong();
           this.loaded = true;
         });
     },
     formatPrice(str) {
       return str.split(".")[0];
+    },
+    formatToStrong() {
+      this.dataObject.items.forEach((el) => {
+        el.included.forEach((e) => {
+          e.long_name = e.long_name.replace(e.attributes.attribute_value, "__");
+          e.attributes.attribute_value = `<strong>${e.attributes.attribute_value}</strong>`;
+          e.long_name = e.long_name.replace("__", e.attributes.attribute_value);
+        });
+      });
     },
   },
   computed: {
