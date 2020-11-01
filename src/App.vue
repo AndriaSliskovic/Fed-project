@@ -100,9 +100,7 @@
                   <!-- Prices -->
                   <v-row>
                     <template v-for="(price, key) in item.prices">
-                      <!-- key vel : {{key}} value :  {{price}}  -->
                       <template v-for="(p, k) in price">
-                        <!-- key mali : {{k}} value :  {{p}}  -->
                         <v-col cols="6" v-if="k == selectedOption" :key="k">
                           <v-row justify="center" no-gutters>
                             <p
@@ -114,8 +112,6 @@
                                 </span>
                                 rsd/mes
                               </span>
-
-                              <!-- rsd/mes. -->
                               <span v-else>{{ formatPrice(p) }} rsd/mes</span>
                             </p>
                           </v-row>
@@ -126,7 +122,6 @@
                       <span v-html="item.prices.old_price_promo_text"></span>
                     </v-row>
                   </v-row>
-
                   <!-- // Prices -->
                 </v-card-text>
                 <v-card-actions>
