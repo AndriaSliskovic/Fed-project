@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <v-container>
+      <v-container fluid>
         <v-col cols="12" id="select_contract">
           <v-row justify="end">
             <v-col cols="4" id="select_contract_length" v-if="loaded">
@@ -74,7 +74,7 @@
                           v-if="i.product_category == 'tv'"
                           class="pa-0"
                         >
-                          <p v-html="i.long_name" />
+                          <p v-html="i.long_name" class="mb-1"/>
                         </v-col>
                       </template>
                     </v-col>
@@ -106,7 +106,12 @@
                   <v-divider></v-divider>
                   <!-- // Net category -->
                   <!-- Promotions -->
-                  <v-row id="promotions" no-gutters align="center">
+                  <v-row
+                    id="promotions"
+                    no-gutters
+                    align="center"
+                    v-if="selectedOption == 'Ugovor 24 meseca'"
+                  >
                     <v-col cols="4" class="pa-3">
                       <v-row justify="center">
                         <v-img
@@ -124,14 +129,22 @@
                       </v-row>
                     </v-col>
                   </v-row>
+                  <v-divider></v-divider>
                   <!-- // Promotions -->
                   <!-- Prices -->
                   <v-row>
                     <template v-for="(price, key) in item.prices">
                       <template v-for="(p, k) in price">
                         <v-col
-                          :cols="p != '' ? 6 : 12"
+                          :cols="
+                            p != ''
+                              ? selectedOption == 'Ugovor 24 meseca'
+                                ? 6
+                                : 12
+                              : 12
+                          "
                           v-if="k == selectedOption"
+                          :key="key"
                         >
                           <v-row justify="center" no-gutters>
                             <p
@@ -143,7 +156,7 @@
                                 <span class="text-decoration-line-through"
                                   >{{ formatPrice(p) }}
                                 </span>
-                                rsd/mes1
+                                rsd/mes
                               </span>
                               <span v-if="key == 'price_recurring'"
                                 >{{ formatPrice(p) }} rsd/mes</span
@@ -154,18 +167,20 @@
                       </template>
                     </template>
 
-                      <v-col cols="12">
-                                            <v-row justify="center" no-gutters>
-                      <span v-html="item.prices.old_price_promo_text"></span>
-                                          </v-row>
-                      </v-col>
-
+                    <v-col
+                      cols="12"
+                      v-if="selectedOption == 'Ugovor 24 meseca'"
+                    >
+                      <v-row justify="center" no-gutters>
+                        <span v-html="item.prices.old_price_promo_text"></span>
+                      </v-row>
+                    </v-col>
                   </v-row>
                   <!-- // Prices -->
                 </v-card-text>
                 <v-card-actions>
-                  <v-row justify="center" align="center">
-                    <v-btn color="primary" @click="testIt">Naručite</v-btn>
+                  <v-row justify="center" align="center" class="mx5">
+                    <v-btn color="primary" @click="testIt" block class="mx-3">Naručite</v-btn>
                   </v-row>
                 </v-card-actions>
               </v-card>
