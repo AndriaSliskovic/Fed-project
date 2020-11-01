@@ -18,6 +18,7 @@
         </v-col>
         <v-col cols="12">
           <v-row id="cards_container" no-gutters>
+            <!-- Items -->
             <v-col
               cols="12"
               md="4"
@@ -25,11 +26,18 @@
               :key="item.id"
               class="px-4 my-0"
             >
-              <v-card color="secondary">
-                <v-card-text id="featured">
+              <v-card color="secondary" outlined flat>
+                <v-card-text>
+                  <!-- Preporuka -->
                   <v-row justify="center" v-if="item.is_featured">
-                    Promocija
+                    <v-col cols="12">
+                      <v-row justify="center"> Promocija </v-row>
+                    </v-col>
                   </v-row>
+                  <v-divider></v-divider>
+
+                  <!-- // Preporuka -->
+                  <!-- Title -->
                   <v-row id="name">
                     <v-col cols="12">
                       <v-row justify="center">
@@ -41,6 +49,9 @@
                       </v-row>
                     </v-col>
                   </v-row>
+                  <v-divider></v-divider>
+                  <!--  // Title -->
+                  <!-- Categories -->
                   <v-row id="included" align="center">
                     <v-col cols="4">
                       <v-row align="center" justify="center">
@@ -64,13 +75,14 @@
                       </v-list-item>
                     </v-col>
                   </v-row>
+                  <v-divider></v-divider>
+                  <!--// Categories -->
+                  <!-- Promotions -->
                   <v-row id="promotions" no-gutters align="center">
-                    <v-col cols="3">
+                    <v-col cols="3" class="pl-3">
                       <v-row justify="center">
                         <v-img
                           lazy-src="https://picsum.photos/id/11/10/6"
-                          max-height="60"
-                          max-width="100"
                           :src="item.promotions[0].promotion_image"
                         ></v-img>
                       </v-row>
@@ -84,32 +96,50 @@
                       </v-row>
                     </v-col>
                   </v-row>
+                  <!-- // Promotions -->
                   <!-- Prices -->
-                  <v-row id="prices" v-for="(price,i) in prices" :key="i">
-                    <v-row>
-                      <v-col cols="6">
-                        {{ price.old_price_recurring }}
-                      </v-col>
-                      <v-col cols="6">
-                        {{ item.prices.price_recurring }}
-                      </v-col>
+                  <v-row>
+                    <template v-for="(price, key) in item.prices">
+                      <!-- key vel : {{key}} value :  {{price}}  -->
+                      <template v-for="(p, k) in price">
+                        <!-- key mali : {{k}} value :  {{p}}  -->
+                        <v-col cols="6" v-if="k == selectedOption" :key="k">
+                          <v-row justify="center" no-gutters>
+                            <p
+                              class="text-h6 purple--text text-darken-2 font-weight-bold mb-0"
+                            >
+                              <span v-if="key == 'old_price_recurring'">
+                                <span class="text-decoration-line-through"
+                                  >{{ formatPrice(p) }}
+                                </span>
+                                rsd/mes
+                              </span>
+
+                              <!-- rsd/mes. -->
+                              <span v-else>{{ formatPrice(p) }} rsd/mes</span>
+                            </p>
+                          </v-row>
+                        </v-col>
+                      </template>
+                    </template>
+                    <v-row justify="center" no-gutters>
+                      <span v-html="item.prices.old_price_promo_text"></span>
                     </v-row>
-                    <v-col cols="12">
-                      <v-row justify="center">
-                        <span v-html="item.prices.old_price_promo_text"></span>
-                      </v-row>
-                    </v-col>
                   </v-row>
+
+                  <!-- // Prices -->
                 </v-card-text>
                 <v-card-actions>
-                  <v-row justify="center">
+                  <v-row justify="center" align="center">
                     <v-btn color="primary" @click="testIt">Naručite</v-btn>
                   </v-row>
                 </v-card-actions>
               </v-card>
-
-              <v-divider></v-divider>
             </v-col>
+            <!-- // Items -->
+
+            <!-- Prices -->
+            <!-- // Prices -->
           </v-row>
         </v-col>
       </v-container>
@@ -140,19 +170,19 @@ export default {
   // },
   methods: {
     testIt() {
-      console.log("test");
       const items = this.dataObject.items;
       const arr = [];
-
       items.forEach((el) => {
         const obj = {};
-        console.log("forEach");
         for (const key in el.prices) {
           const element = el.prices[key];
-          const oldPromo=String(element['old_price_promo_text']) 
-          console.log("old_price_promo_text",oldPromo)
-          //console.log("for in", element[this.selectedOption], key);
-          this.$set(obj, key, element[this.selectedOption]);
+          if (typeof element[this.selectedOption] != "undefined") {
+            console.log("ima undefine", key);
+
+            const formatedPrice = element[this.selectedOption].split(".")[0];
+            console.log("formated", formated);
+            this.$set(obj, key, formated);
+          }
         }
         arr.push(obj);
       });
@@ -169,23 +199,26 @@ export default {
           this.loaded = true;
         });
     },
-    setFeaturedOfset() {},
+    formatPrice(str) {
+      return str.split(".")[0];
+    },
   },
   computed: {
     prices() {
-       const items = this.dataObject.items;
+      const items = this.dataObject.items;
       const arr = [];
-
       items.forEach((el) => {
         const obj = {};
         for (const key in el.prices) {
           const element = el.prices[key];
-          //console.log("for in", element[this.selectedOption], key);
-          this.$set(obj, key, element[this.selectedOption]);
+          if (typeof element[this.selectedOption] != "undefined") {
+            const formatedPrice = element[this.selectedOption].split(".")[0];
+            this.$set(obj, key, formatedPrice);
+          }
         }
         arr.push(obj);
       });
-      return arr
+      return arr;
     },
     netCategory() {
       return this.dataObject.assets.net_category;
