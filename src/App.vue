@@ -1,10 +1,10 @@
 <template>
   <v-app>
     <v-main>
-      <v-container>
+      <v-container fluid>
         <v-col cols="12" id="select_contract">
           <v-row justify="end">
-            <v-col cols="4" id="select_contract_length" v-if="loaded">
+            <v-col cols="2" id="select_contract_length" v-if="loaded">
               <v-select
                 :items="dataObject.contract_length.contract_length_options"
                 dense
@@ -14,9 +14,7 @@
             </v-col>
           </v-row>
         </v-col>
-        <template>
-          <!-- <Products :height="containerHeights.tv"></Products> -->
-        </template>
+        <template> </template>
         <!-- Kontejner -->
         <v-col cols="12">
           <v-row id="cards_container" no-gutters>
@@ -30,17 +28,18 @@
             >
               <v-card color="secondary" outlined flat>
                 <v-card-text>
-                  <!-- Preporuka -->
+                  <!-- <Products :height='containerHeights.name'></Products> -->
+                  <!-- Recommendation -->
                   <v-row
-                    id="preporuka"
+                    id="recommendation"
                     justify="center"
                     no-gutters
-                    :ref="`preporuka-${item.id}`"
+                    :ref="`recommendation-${item.id}`"
                   >
                     <v-col cols="12">
                       <v-row justify="center">
                         <p
-                        v-if="item.is_featured"
+                          v-if="item.is_featured"
                           class="subtitle-1 purple--text text-darken-2 font-weight-bold"
                         >
                           Preporučujemo
@@ -56,7 +55,7 @@
                     <v-col cols="12">
                       <v-row justify="center">
                         <p
-                          class="text-h4 purple--text text-darken-2 font-weight-bold text-center"
+                          class="text-h3 purple--text text-darken-2 font-weight-bold text-center"
                         >
                           {{ item.name }}
                         </p>
@@ -66,7 +65,7 @@
                   <v-divider></v-divider>
                   <!--  // Name -->
                   <!-- TV category -->
-                  <v-row id="includedTv" align="center" :ref="`tv-${item.id}`">
+                  <v-row id="tvSection" align="center" :ref="`tv-${item.id}`">
                     <v-col cols="4">
                       <v-row justify="center">
                         <v-avatar>
@@ -90,7 +89,7 @@
                   <v-divider></v-divider>
                   <!--// TV category -->
                   <!-- Net category -->
-                  <v-row id="includedNet" align="center">
+                  <v-row id="netSection" align="center">
                     <v-col cols="4">
                       <v-row justify="center">
                         <v-avatar>
@@ -140,7 +139,7 @@
                   <v-divider></v-divider>
                   <!-- // Promotions -->
                   <!-- Prices -->
-                  <v-row align="center">
+                  <v-row align="center" id="prices">
                     <template v-for="(price, key) in item.prices">
                       <template v-for="(p, k) in price">
                         <v-col
@@ -155,7 +154,7 @@
                           :key="key"
                           class="pb-0"
                         >
-                          <v-row justify="center"  no-gutters>
+                          <v-row justify="center" no-gutters>
                             <p
                               class="purple--text text-darken-2 font-weight-bold mb-0"
                               :class="
@@ -172,9 +171,9 @@
                                 </span>
                                 rsd/mes.
                               </span>
-                              <span 
-                              v-if="key == 'price_recurring'"
-                              class="text-h4"
+                              <span
+                                v-if="key == 'price_recurring'"
+                                class="text-h4"
                                 >{{ formatPrice(p) }} rsd/mes</span
                               >
                             </p>
@@ -195,7 +194,7 @@
                   </v-row>
                   <!-- // Prices -->
                   <!-- Button -->
-                  <v-row justify="center" align="center">
+                  <v-row justify="center" align="center" id="submitButton">
                     <v-col cols="12" class="mt-3">
                       <v-btn color="primary" @click="setRefsKeyArray" block
                         >Naručite</v-btn
@@ -217,7 +216,7 @@
 </template>
 
 <script>
-
+import Products from "@/components/Products.vue";
 export default {
   name: "App",
   data() {
@@ -231,7 +230,7 @@ export default {
   },
 
   components: {
-
+    Products,
   },
   created() {
     this.getDataFromApi();
@@ -340,6 +339,9 @@ export default {
     //----------------------- Kraj
   },
   computed: {
+    bPoint() {
+      return this.$vuetify.breakpoint;
+    },
     prices() {
       const items = this.dataObject.items;
       const arr = [];
