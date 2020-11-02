@@ -1,13 +1,11 @@
 <template>
   <v-app>
     <v-main>
-      <v-container fluid>
+      <v-container>
         <v-col cols="12" id="select_contract">
           <v-row justify="end">
             <v-col cols="4" id="select_contract_length" v-if="loaded">
               <v-select
-                item-value="id"
-                item-text="name"
                 :items="dataObject.contract_length.contract_length_options"
                 dense
                 solo
@@ -16,9 +14,13 @@
             </v-col>
           </v-row>
         </v-col>
+        <template>
+          <!-- <Products :height="containerHeights.tv"></Products> -->
+        </template>
+        <!-- Kontejner -->
         <v-col cols="12">
           <v-row id="cards_container" no-gutters>
-            <!-- Items -->
+            <!-- Items kartica-->
             <v-col
               cols="12"
               md="4"
@@ -29,10 +31,16 @@
               <v-card color="secondary" outlined flat>
                 <v-card-text>
                   <!-- Preporuka -->
-                  <v-row justify="center" v-if="item.is_featured" no-gutters>
+                  <v-row
+                    id="preporuka"
+                    justify="center"
+                    no-gutters
+                    :ref="`preporuka-${item.id}`"
+                  >
                     <v-col cols="12">
                       <v-row justify="center">
                         <p
+                        v-if="item.is_featured"
                           class="subtitle-1 purple--text text-darken-2 font-weight-bold"
                         >
                           Preporučujemo
@@ -41,14 +49,14 @@
                     </v-col>
                   </v-row>
                   <v-divider></v-divider>
-
                   <!-- // Preporuka -->
-                  <!-- Title -->
-                  <v-row id="name">
+
+                  <!-- Name -->
+                  <v-row id="name" :ref="`name-${item.id}`">
                     <v-col cols="12">
                       <v-row justify="center">
                         <p
-                          class="text-h4 purple--text text-darken-2 font-weight-bold"
+                          class="text-h4 purple--text text-darken-2 font-weight-bold text-center"
                         >
                           {{ item.name }}
                         </p>
@@ -56,9 +64,9 @@
                     </v-col>
                   </v-row>
                   <v-divider></v-divider>
-                  <!--  // Title -->
+                  <!--  // Name -->
                   <!-- TV category -->
-                  <v-row id="includedTv" align="center">
+                  <v-row id="includedTv" align="center" :ref="`tv-${item.id}`">
                     <v-col cols="4">
                       <v-row justify="center">
                         <v-avatar>
@@ -74,7 +82,7 @@
                           v-if="i.product_category == 'tv'"
                           class="pa-0"
                         >
-                          <p v-html="i.long_name" class="mb-1"/>
+                          <p v-html="i.long_name" class="mb-1" />
                         </v-col>
                       </template>
                     </v-col>
@@ -98,7 +106,7 @@
                           v-if="i.product_category == 'net'"
                           class="pa-0"
                         >
-                          <p v-html="i.long_name" />
+                          <p v-html="i.long_name" class="mb-1" />
                         </v-col>
                       </template>
                     </v-col>
@@ -132,7 +140,7 @@
                   <v-divider></v-divider>
                   <!-- // Promotions -->
                   <!-- Prices -->
-                  <v-row>
+                  <v-row align="center">
                     <template v-for="(price, key) in item.prices">
                       <template v-for="(p, k) in price">
                         <v-col
@@ -145,10 +153,16 @@
                           "
                           v-if="k == selectedOption"
                           :key="key"
+                          class="pb-0"
                         >
-                          <v-row justify="center" no-gutters>
+                          <v-row justify="center"  no-gutters>
                             <p
-                              class="text-h6 purple--text text-darken-2 font-weight-bold mb-0"
+                              class="purple--text text-darken-2 font-weight-bold mb-0"
+                              :class="
+                                selectedOption == 'Ugovor 24 meseca'
+                                  ? 'text-h6'
+                                  : 'text-h4'
+                              "
                             >
                               <span
                                 v-if="key == 'old_price_recurring' && p != ''"
@@ -156,9 +170,11 @@
                                 <span class="text-decoration-line-through"
                                   >{{ formatPrice(p) }}
                                 </span>
-                                rsd/mes
+                                rsd/mes.
                               </span>
-                              <span v-if="key == 'price_recurring'"
+                              <span 
+                              v-if="key == 'price_recurring'"
+                              class="text-h4"
                                 >{{ formatPrice(p) }} rsd/mes</span
                               >
                             </p>
@@ -170,6 +186,7 @@
                     <v-col
                       cols="12"
                       v-if="selectedOption == 'Ugovor 24 meseca'"
+                      class="py-0"
                     >
                       <v-row justify="center" no-gutters>
                         <span v-html="item.prices.old_price_promo_text"></span>
@@ -177,12 +194,15 @@
                     </v-col>
                   </v-row>
                   <!-- // Prices -->
-                </v-card-text>
-                <v-card-actions>
-                  <v-row justify="center" align="center" class="mx5">
-                    <v-btn color="primary" @click="testIt" block class="mx-3">Naručite</v-btn>
+                  <!-- Button -->
+                  <v-row justify="center" align="center">
+                    <v-col cols="12" class="mt-3">
+                      <v-btn color="primary" @click="setRefsKeyArray" block
+                        >Naručite</v-btn
+                      >
+                    </v-col>
                   </v-row>
-                </v-card-actions>
+                </v-card-text>
               </v-card>
             </v-col>
             <!-- // Items -->
@@ -197,6 +217,7 @@
 </template>
 
 <script>
+
 export default {
   name: "App",
   data() {
@@ -205,20 +226,27 @@ export default {
       dataObject: {},
       loaded: false,
       selectedOption: null,
-      konRez: null,
-      //isFeaturedOfset:0
+      containerHeights: {},
     };
   },
 
-  components: {},
+  components: {
+
+  },
   created() {
     this.getDataFromApi();
   },
-  // mounted() {
-  // this.selectedOption=this.dataObject.contract_length.preselected_contract_length
-
-  // },
+  mounted() {
+    const arrOfRefKeys = this.setRefsKeyArray();
+    for (const iterator of arrOfRefKeys) {
+      this.setRefsElements(iterator);
+    }
+  },
   methods: {
+    onResize() {
+      this.windowSize = { x: window.innerWidth, y: window.innerHeight };
+      console.log("resize");
+    },
     testIt() {
       this.formatToStrong();
     },
@@ -231,6 +259,10 @@ export default {
         .then(() => {
           this.selectedOption = this.dataObject.contract_length.preselected_contract_length;
           this.formatToStrong();
+          const arrOfRefKeys = this.setRefsKeyArray();
+          for (const iterator of arrOfRefKeys) {
+            this.setRefsElements(iterator);
+          }
           this.loaded = true;
         });
     },
@@ -246,6 +278,66 @@ export default {
         });
       });
     },
+    //Logika za izjednacavanje maksimalne visine kontejnera
+    //Formira niz za koje treba podesavanje visine, po konvenciji svaki ref (roditelj) koji ima '-' treba podesiti visinu
+    //Ovo se moze izbeci hardkodovanim nizom u data objektu
+    setRefsKeyArray() {
+      const arrOfRefKeys = [];
+      console.log("refs", this.$refs);
+      for (const key in this.$refs) {
+        if (this.$refs.hasOwnProperty(key) && key.includes("-")) {
+          const cutedKey = key.split("-")[0];
+          arrOfRefKeys.push(cutedKey);
+        }
+      }
+      const uniqueKeys = new Set(arrOfRefKeys);
+      // console.log("setRefsKeyArray",uniqueKeys)
+      return uniqueKeys;
+    },
+    //Logika za podesavanje istih visina containera
+    setRefsElements(k) {
+      const arrOfHeights = [];
+      let singleElement = null;
+      let sumOfHeights = 0;
+      for (const key in this.$refs) {
+        //Na ovaj nacin eliminise refse kojima ne treba podesavanje visine (mogu biti i refsi kojima ne treba setovati visinu)
+        if (this.$refs.hasOwnProperty(key) && key.includes("-")) {
+          const element = this.$refs[key];
+          //Setovanje visine za prosledjeni parametar
+          if (key.includes(k)) {
+            //Ako ima samo jedan element
+            if (element.length == 1) {
+              const height = element[0].clientHeight;
+              arrOfHeights.push(height);
+              singleElement = true;
+            }
+            //Ako ima child elemente
+            else {
+              let sumOfChildHeights = 0;
+              for (const el of element) {
+                sumOfChildHeights = sumOfChildHeights + el.clientHeight;
+              }
+              arrOfHeights.push(sumOfChildHeights);
+              singleElement = false;
+            }
+          }
+        }
+      }
+      console.log("posle foreacha", arrOfHeights, k);
+      if (singleElement) {
+        //Ukoliko ima samo jedan element treba setovati visinu elementu sa max vrednoscu
+        const maxValue = this.getMaxValue(arrOfHeights);
+        this.$set(this.containerHeights, k, maxValue);
+      } else {
+        //Ima child komponente - uzeti zbir visina elemenata
+        const sumOfHeights = this.getMaxValue(arrOfHeights);
+        this.$set(this.containerHeights[k], k, sumOfHeights);
+      }
+    },
+    getMaxValue(arr) {
+      return Math.max(...arr);
+    },
+    //----------------------- Kraj
   },
   computed: {
     prices() {
@@ -273,3 +365,5 @@ export default {
   },
 };
 </script>
+<style scoped>
+</style>
