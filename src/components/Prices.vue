@@ -5,7 +5,7 @@
         <v-col
           :cols="p != '' ? (selectedOption == 'Ugovor 24 meseca' ? 6 : 12) : 12"
           v-if="k == selectedOption"
-          :key="k"
+          :key="key"
           class="pb-0"
         >
           <v-row justify="center" no-gutters>
