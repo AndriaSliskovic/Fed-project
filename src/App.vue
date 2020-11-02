@@ -4,7 +4,12 @@
       <v-container fluid>
         <v-col cols="12" id="select_contract">
           <v-row justify="end">
-            <v-col cols="2" id="select_contract_length" v-if="loaded">
+            <v-col
+              cols="3"
+              id="select_contract_length"
+              v-if="loaded"
+              class="mr-5"
+            >
               <v-select
                 :items="dataObject.contract_length.contract_length_options"
                 dense
@@ -24,183 +29,77 @@
               md="4"
               v-for="item of dataObject.items"
               :key="item.id"
-              class="px-4 my-0"
+              class="pa-4"
             >
               <v-card color="secondary" outlined flat>
                 <v-card-text>
                   <!-- <Products :height='containerHeights.name'></Products> -->
                   <!-- Recommendation -->
-                  <v-row
-                    id="recommendation"
-                    justify="center"
-                    no-gutters
-                    :ref="`recommendation-${item.id}`"
-                  >
-                    <v-col cols="12">
-                      <v-row justify="center">
-                        <p
-                          v-if="item.is_featured"
-                          class="subtitle-1 purple--text text-darken-2 font-weight-bold"
-                        >
-                          Preporučujemo
-                        </p>
-                      </v-row>
-                    </v-col>
-                  </v-row>
+                  <div id="recommendation" :ref="`recommendation-${item.id}`">
+                    <Recommendation
+                      :data="item.is_featured"
+                      :height="containerHeights.recommendation"
+                    ></Recommendation>
+                  </div>
                   <v-divider></v-divider>
                   <!-- // Preporuka -->
 
                   <!-- Name -->
-                  <v-row id="name" :ref="`name-${item.id}`">
-                    <v-col cols="12">
-                      <v-row justify="center">
-                        <p
-                          class="text-h3 purple--text text-darken-2 font-weight-bold text-center"
-                        >
-                          {{ item.name }}
-                        </p>
-                      </v-row>
-                    </v-col>
-                  </v-row>
+                  <div id="name" :ref="`name-${item.id}`">
+                    <Name :data="item.name" :height="containerHeights.name">{{
+                      item.name
+                    }}</Name>
+                  </div>
                   <v-divider></v-divider>
                   <!--  // Name -->
-                  <!-- TV category -->
-                  <v-row id="tvSection" align="center" :ref="`tv-${item.id}`">
-                    <v-col cols="4">
-                      <v-row justify="center">
-                        <v-avatar>
-                          <img :src="tvCategory" alt="tv_category" />
-                        </v-avatar>
-                      </v-row>
-                    </v-col>
-                    <v-col cols="8">
-                      <template v-for="i in item.included">
-                        <v-col
-                          cols="12"
-                          :key="i.id"
-                          v-if="i.product_category == 'tv'"
-                          class="pa-0"
-                        >
-                          <p v-html="i.long_name" class="mb-1" />
-                        </v-col>
-                      </template>
-                    </v-col>
-                  </v-row>
+                  <!-- TV section -->
+                  <div id="tvSection" :ref="`tvSection-${item.id}`">
+                    <TvSection
+                      :item="item"
+                      :height="containerHeights.tvSection"
+                      :tvCategory="tvCategory"
+                    ></TvSection>
+                  </div>
                   <v-divider></v-divider>
-                  <!--// TV category -->
-                  <!-- Net category -->
-                  <v-row id="netSection" align="center">
-                    <v-col cols="4">
-                      <v-row justify="center">
-                        <v-avatar>
-                          <img :src="netCategory" alt="tv_category" />
-                        </v-avatar>
-                      </v-row>
-                    </v-col>
-                    <v-col cols="8">
-                      <template v-for="i in item.included">
-                        <v-col
-                          cols="12"
-                          :key="i.id"
-                          v-if="i.product_category == 'net'"
-                          class="pa-0"
-                        >
-                          <p v-html="i.long_name" class="mb-1" />
-                        </v-col>
-                      </template>
-                    </v-col>
-                  </v-row>
+                  <!--// TV section -->
+                  <!-- Net section -->
+                  <div id="netSection" :ref="`netSection-${item.id}`">
+                    <NetSection
+                      :item="item"
+                      :height="containerHeights.netSection"
+                      :netCategory="netCategory"
+                    ></NetSection>
+                  </div>
                   <v-divider></v-divider>
                   <!-- // Net category -->
                   <!-- Promotions -->
-                  <v-row
+                  <div
                     id="promotions"
-                    no-gutters
-                    align="center"
+                    :ref="`promotions-${item.id}`"
                     v-if="selectedOption == 'Ugovor 24 meseca'"
                   >
-                    <v-col cols="4" class="pa-3">
-                      <v-row justify="center">
-                        <v-img
-                          lazy-src="https://picsum.photos/id/11/10/6"
-                          :src="item.promotions[0].promotion_image"
-                        ></v-img>
-                      </v-row>
-                    </v-col>
-                    <v-col cols="8">
-                      <v-row justify="center">
-                        <span
-                          v-html="item.promotions[0].promo_text"
-                          class="purple--text text-darken-2 font-italic font-weight-medium"
-                        ></span>
-                      </v-row>
-                    </v-col>
-                  </v-row>
+                    <Promotions :img="item.promotions[0].promotion_image">
+                      <span
+                        v-html="item.promotions[0].promo_text"
+                        class="purple--text text-darken-2 font-italic font-weight-medium"
+                      ></span>
+                    </Promotions>
+                  </div>
                   <v-divider></v-divider>
                   <!-- // Promotions -->
                   <!-- Prices -->
-                  <v-row align="center" id="prices">
-                    <template v-for="(price, key) in item.prices">
-                      <template v-for="(p, k) in price">
-                        <v-col
-                          :cols="
-                            p != ''
-                              ? selectedOption == 'Ugovor 24 meseca'
-                                ? 6
-                                : 12
-                              : 12
-                          "
-                          v-if="k == selectedOption"
-                          :key="key"
-                          class="pb-0"
-                        >
-                          <v-row justify="center" no-gutters>
-                            <p
-                              class="purple--text text-darken-2 font-weight-bold mb-0"
-                              :class="
-                                selectedOption == 'Ugovor 24 meseca'
-                                  ? 'text-h6'
-                                  : 'text-h4'
-                              "
-                            >
-                              <span
-                                v-if="key == 'old_price_recurring' && p != ''"
-                              >
-                                <span class="text-decoration-line-through"
-                                  >{{ formatPrice(p) }}
-                                </span>
-                                rsd/mes.
-                              </span>
-                              <span
-                                v-if="key == 'price_recurring'"
-                                class="text-h4"
-                                >{{ formatPrice(p) }} rsd/mes</span
-                              >
-                            </p>
-                          </v-row>
-                        </v-col>
-                      </template>
-                    </template>
-
-                    <v-col
-                      cols="12"
-                      v-if="selectedOption == 'Ugovor 24 meseca'"
-                      class="py-0"
-                    >
-                      <v-row justify="center" no-gutters>
-                        <span v-html="item.prices.old_price_promo_text"></span>
-                      </v-row>
-                    </v-col>
-                  </v-row>
+                  <div id="prices" :ref="`prices-${item.id}`">
+                    <Prices
+                      :item="item"
+                      :height="containerHeights.prices"
+                      :selectedOption="selectedOption"
+                    ></Prices>
+                  </div>
                   <!-- // Prices -->
                   <!-- Button -->
-                  <v-row justify="center" align="center" id="submitButton">
-                    <v-col cols="12" class="mt-3">
-                      <v-btn color="primary" @click="setRefsKeyArray" block
-                        >Naručite</v-btn
-                      >
-                    </v-col>
-                  </v-row>
+                  <div id="submitButton">
+                    <SubmitButton @submited="onSubmited">Naručite</SubmitButton>
+                  </div>
                 </v-card-text>
               </v-card>
             </v-col>
@@ -216,7 +115,14 @@
 </template>
 
 <script>
-import Products from "@/components/Products.vue";
+import Recommendation from "@/components/Recommedation.vue";
+import Name from "@/components/Name";
+import TvSection from "@/components/TvSection";
+import NetSection from "@/components/NetSection";
+import Promotions from "@/components/Promotions";
+import Prices from "@/components/Prices";
+import SubmitButton from "@/components/SubmitButton";
+
 export default {
   name: "App",
   data() {
@@ -230,7 +136,13 @@ export default {
   },
 
   components: {
-    Products,
+    Recommendation,
+    Name,
+    TvSection,
+    NetSection,
+    Promotions,
+    Prices,
+    SubmitButton,
   },
   created() {
     this.getDataFromApi();
@@ -242,13 +154,7 @@ export default {
     }
   },
   methods: {
-    onResize() {
-      this.windowSize = { x: window.innerWidth, y: window.innerHeight };
-      console.log("resize");
-    },
-    testIt() {
-      this.formatToStrong();
-    },
+    testIt() {},
     getDataFromApi() {
       this.axios
         .get(this.apiPoint)
@@ -265,9 +171,6 @@ export default {
           this.loaded = true;
         });
     },
-    formatPrice(str) {
-      return str.split(".")[0];
-    },
     formatToStrong() {
       this.dataObject.items.forEach((el) => {
         el.included.forEach((e) => {
@@ -282,7 +185,6 @@ export default {
     //Ovo se moze izbeci hardkodovanim nizom u data objektu
     setRefsKeyArray() {
       const arrOfRefKeys = [];
-      console.log("refs", this.$refs);
       for (const key in this.$refs) {
         if (this.$refs.hasOwnProperty(key) && key.includes("-")) {
           const cutedKey = key.split("-")[0];
@@ -290,7 +192,6 @@ export default {
         }
       }
       const uniqueKeys = new Set(arrOfRefKeys);
-      // console.log("setRefsKeyArray",uniqueKeys)
       return uniqueKeys;
     },
     //Logika za podesavanje istih visina containera
@@ -322,7 +223,6 @@ export default {
           }
         }
       }
-      console.log("posle foreacha", arrOfHeights, k);
       if (singleElement) {
         //Ukoliko ima samo jedan element treba setovati visinu elementu sa max vrednoscu
         const maxValue = this.getMaxValue(arrOfHeights);
@@ -336,7 +236,9 @@ export default {
     getMaxValue(arr) {
       return Math.max(...arr);
     },
-    //----------------------- Kraj
+    onSubmited() {
+      console.log("Submited");
+    },
   },
   computed: {
     bPoint() {
