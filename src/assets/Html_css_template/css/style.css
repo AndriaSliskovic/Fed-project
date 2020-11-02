@@ -1,0 +1,156 @@
+*
+{
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+select{
+    padding: 5px;
+    border: none;
+    background-color:  rgb(255, 243, 233);
+    border-radius: 8px;
+}
+header{
+    display: flex;
+    flex-direction: row-reverse;
+    padding-top: 10vh;
+    padding-right: 10%;
+}
+#boxes{
+    padding-top: 5vh;
+    display: flex;
+    justify-content: space-around;
+}
+.box{
+    width: 20%;
+    background-color: rgb(255, 243, 233);
+    text-align: center;
+    border-radius: 10px;
+}
+.box li{
+    text-align: left;
+}
+.box hr{
+    width: 90%;
+    margin: 0 auto;
+    border-top: 1px solid rgb(194, 194, 194);
+}
+.featured h2{
+    font-size: 12px;
+    padding: 1vh 0;
+    color: rgb(84, 23, 141);
+    font-style: italic;
+}
+.product-name{
+    padding: 3vh 0;
+    text-align: center;
+    color: rgb(84, 23, 141);
+    font-style: italic;
+    font-size: 1.6rem;
+}
+.tv-category{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding: 3vh 0;
+}
+.tv-icon img{
+    width: 30%;
+    /*background-color: rgb(158, 29, 158);
+    border-radius: 50px;*/
+}
+.tv-icon{
+    width: 30%;
+}
+.net-category{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+}
+.net-icon img{
+    width: 30%;
+}
+.net-icon{
+    width: 30%;
+}
+.promo{
+    border-radius: 5px;
+    width: 90%;
+    background-color: white;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom:3vh ;
+}
+.promo img{
+    width: 20%;
+}
+.promo p{
+    color: rgb(84, 23, 141);
+    font-weight: bold;
+    font-style: italic;
+}
+.promo-text{
+    color: gray;
+    font-size: 0.8rem;
+}
+.prices{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 2vh 0;
+    color: rgb(84, 23, 141);
+    font-style: italic;
+}
+.old-price-recurring{
+    text-decoration: black line-through ;
+    
+}
+.price-recurring{
+    font-weight: bolder;
+    font-size: 1.6rem;
+}
+.box button{
+    width: 90%;
+    padding: 8px;
+    border-radius: 7px;
+    margin: 2vh 0;
+    outline: none;
+    border: none;
+    background-color: rgb(84, 23, 141);
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.box button:hover{
+    border-radius: 0;
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+    #boxes{
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .box{
+        width: 40%;
+        margin: 8vh 10%;
+    }
+    .box li{
+        font-size: 0.8rem;
+    }
+    .promo p{
+        font-size: 0.8rem;
+    }
+  }
+
+  @media only screen and (max-width: 320px) {
+    
+    .box{
+        width: 80%;
+        margin: 5vh 10%;
+    }
+  }
