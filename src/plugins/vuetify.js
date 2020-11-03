@@ -7,7 +7,7 @@ Vue.use(Vuetify);
 export default new Vuetify({
     breakpoint: {
         thresholds: {
-          xs: 320,
+          xs: 321,
           sm: 540,
           md: 769,
           lg: 1367,
