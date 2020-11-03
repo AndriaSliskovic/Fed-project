@@ -1,7 +1,7 @@
 <template>
   <v-card
     :color="!data ? 'white' : 'secondary'"
-    :style="{ height: setHeight, borderStyle: none }"
+    :style="{ height: setHeight, borderStyle: 'none' }"
     flat
   >
     <v-col cols="12" v-if="data">
