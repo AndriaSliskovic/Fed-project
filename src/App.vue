@@ -31,25 +31,17 @@
               :key="item.id"
               class="pa-4"
             >
+              <!-- Recommendation -->
               <div id="recommendation" :ref="`recommendation-${item.id}`">
                 <Recommendation
                   :data="item.is_featured"
                   :height="containerHeights.recommendation"
                 ></Recommendation>
+                <v-divider v-if="item.is_featured"></v-divider>
               </div>
+              <!-- // Recommendation -->
               <v-card color="secondary" flat>
                 <v-card-text>
-                  <!-- <Products :height='containerHeights.name'></Products> -->
-                  <!-- Recommendation -->
-                  <!-- <div id="recommendation" :ref="`recommendation-${item.id}`">
-                    <Recommendation
-                      :data="item.is_featured"
-                      :height="containerHeights.recommendation"
-                    ></Recommendation>
-                  </div> -->
-
-                  <!-- // Preporuka -->
-
                   <!-- Name -->
                   <div id="name" :ref="`name-${item.id}`">
                     <Name :data="item.name" :height="containerHeights.name">
