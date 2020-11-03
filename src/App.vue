@@ -2,12 +2,13 @@
   <v-app>
     <v-main>
       <v-container fluid>
-        <v-row justify="end" id="select_contract" no-gutters>
+        <v-row justify="end" id="select_contract" no-gutters class="pr-8">
           <v-col
-            cols="3"
+            cols="12"
+            sm="4"
+            lg="3"
             id="select_contract_length"
             v-if="loaded"
-            class="mr-8"
           >
             <v-select
               :items="dataObject.contract_length.contract_length_options"
