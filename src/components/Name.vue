@@ -1,7 +1,6 @@
 <template>
   <v-row justify="center" align="center" :style="{ height: setHeight }">
     <v-col cols="12">
-      {{ bPoint.lgAndDow }}
       <p
         class="text-h4 purple--text text-darken-2 font-weight-bold font-italic text-center"
         :class="bPoint.lgAndDow ? 'text-h4' : 'text-h3'"

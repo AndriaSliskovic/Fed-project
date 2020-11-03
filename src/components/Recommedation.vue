@@ -1,5 +1,5 @@
 <template>
-  <v-row :style="{ height: setHeight }" justify="center" no-gutters>
+  <v-row :style="{ height: setHeight,color:'red' }" justify="center" no-gutters>
     <v-col cols="12">
       <v-row justify="center">
         <p

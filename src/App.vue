@@ -2,23 +2,23 @@
   <v-app>
     <v-main>
       <v-container fluid>
-        <v-col cols="12" id="select_contract">
-          <v-row justify="end">
+          <v-row justify="end" id="select_contract" no-gutters>
             <v-col
               cols="3"
               id="select_contract_length"
               v-if="loaded"
-              class="mr-5"
+              class="mr-8"
             >
               <v-select
                 :items="dataObject.contract_length.contract_length_options"
                 dense
                 solo
                 v-model="selectedOption"
+                background-color="secondary"
               ></v-select>
             </v-col>
           </v-row>
-        </v-col>
+
         <template> </template>
         <!-- Kontejner -->
         <v-col cols="12">
@@ -31,7 +31,7 @@
               :key="item.id"
               class="pa-4"
             >
-              <v-card color="secondary" outlined flat>
+              <v-card color="secondary" flat>
                 <v-card-text>
                   <!-- <Products :height='containerHeights.name'></Products> -->
                   <!-- Recommendation -->
@@ -46,9 +46,9 @@
 
                   <!-- Name -->
                   <div id="name" :ref="`name-${item.id}`">
-                    <Name :data="item.name" :height="containerHeights.name">{{
-                      item.name
-                    }}</Name>
+                    <Name :data="item.name" :height="containerHeights.name">
+                      {{ item.name }}
+                    </Name>
                   </div>
                   <v-divider></v-divider>
                   <!--  // Name -->
