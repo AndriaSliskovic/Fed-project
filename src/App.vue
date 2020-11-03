@@ -2,6 +2,12 @@
   <v-app>
     <v-main>
       <v-container fluid>
+            <v-progress-circular
+      indeterminate
+      color="primary"
+      v-if="!loaded"
+      class="centered"
+    ></v-progress-circular>
         <v-row justify="end" id="select_contract" no-gutters class="pr-8">
           <v-col
             cols="12"
@@ -269,4 +275,10 @@ export default {
 };
 </script>
 <style scoped>
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 </style>
