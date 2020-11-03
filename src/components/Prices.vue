@@ -8,6 +8,8 @@
           key != 'old_price_promo_text' && selectedOption == 'Ugovor 24 meseca'
         "
         :key="key"
+        :order="key == 'price_recurring' ? 1 : 2"
+        :order-sm="key == 'price_recurring' ? 2 : 1"
       >
         <Price :keyPrice="key">{{ formatPrice(price[selectedOption]) }}</Price>
       </v-col>
