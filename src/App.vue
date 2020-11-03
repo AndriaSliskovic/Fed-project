@@ -2,22 +2,23 @@
   <v-app>
     <v-main>
       <v-container fluid>
-          <v-row justify="end" id="select_contract" no-gutters>
-            <v-col
-              cols="3"
-              id="select_contract_length"
-              v-if="loaded"
-              class="mr-8"
-            >
-              <v-select
-                :items="dataObject.contract_length.contract_length_options"
-                dense
-                solo
-                v-model="selectedOption"
-                background-color="secondary"
-              ></v-select>
-            </v-col>
-          </v-row>
+        <v-row justify="end" id="select_contract" no-gutters class="pr-8">
+          <v-col
+            cols="12"
+            sm="4"
+            lg="3"
+            id="select_contract_length"
+            v-if="loaded"
+          >
+            <v-select
+              :items="dataObject.contract_length.contract_length_options"
+              dense
+              solo
+              v-model="selectedOption"
+              background-color="secondary"
+            ></v-select>
+          </v-col>
+        </v-row>
 
         <template> </template>
         <!-- Kontejner -->
@@ -31,19 +32,17 @@
               :key="item.id"
               class="pa-4"
             >
+              <!-- Recommendation -->
+              <div id="recommendation" :ref="`recommendation-${item.id}`">
+                <Recommendation
+                  :data="item.is_featured"
+                  :height="containerHeights.recommendation"
+                ></Recommendation>
+                <v-divider v-if="item.is_featured"></v-divider>
+              </div>
+              <!-- // Recommendation -->
               <v-card color="secondary" flat>
                 <v-card-text>
-                  <!-- <Products :height='containerHeights.name'></Products> -->
-                  <!-- Recommendation -->
-                  <div id="recommendation" :ref="`recommendation-${item.id}`">
-                    <Recommendation
-                      :data="item.is_featured"
-                      :height="containerHeights.recommendation"
-                    ></Recommendation>
-                  </div>
-                  <v-divider></v-divider>
-                  <!-- // Preporuka -->
-
                   <!-- Name -->
                   <div id="name" :ref="`name-${item.id}`">
                     <Name :data="item.name" :height="containerHeights.name">
