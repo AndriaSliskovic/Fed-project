@@ -109,9 +109,6 @@
               </v-card>
             </v-col>
             <!-- // Items -->
-
-            <!-- Prices -->
-            <!-- // Prices -->
           </v-row>
         </v-col>
       </v-container>
@@ -179,9 +176,9 @@ export default {
     formatToStrong() {
       this.dataObject.items.forEach((el) => {
         el.included.forEach((e) => {
-          e.long_name = e.long_name.replace(e.attributes.attribute_value, "__");
-          e.attributes.attribute_value = `<strong>${e.attributes.attribute_value}</strong>`;
-          e.long_name = e.long_name.replace("__", e.attributes.attribute_value);
+          const attribute=e.attributes.attribute_value
+          const newAttr=`<strong>${attribute}</strong>`
+          e.long_name = e.long_name.replace(attribute, newAttr);
         });
       });
     },
@@ -248,22 +245,6 @@ export default {
   computed: {
     bPoint() {
       return this.$vuetify.breakpoint;
-    },
-    prices() {
-      const items = this.dataObject.items;
-      const arr = [];
-      items.forEach((el) => {
-        const obj = {};
-        for (const key in el.prices) {
-          const element = el.prices[key];
-          if (typeof element[this.selectedOption] != "undefined") {
-            const formatedPrice = element[this.selectedOption].split(".")[0];
-            this.$set(obj, key, formatedPrice);
-          }
-        }
-        arr.push(obj);
-      });
-      return arr;
     },
     netCategory() {
       return this.dataObject.assets.net_category;

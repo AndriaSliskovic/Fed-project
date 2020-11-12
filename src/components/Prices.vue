@@ -1,4 +1,5 @@
 <template>
+<div>
   <v-row align="center">
     <template v-for="(price, key) in item.prices">
       <v-col
@@ -19,16 +20,15 @@
         :key="key"
       >
         <Price :keyPrice="key">{{ formatPrice(price[selectedOption]) }}</Price>
-        <!-- <Price :keyPrice="key" >{{price[selectedOption]}}</Price> -->
       </v-col>
     </template>
-
-    <v-col cols="12" v-if="selectedOption == 'Ugovor 24 meseca'" class="py-0">
+  </v-row>
+      <v-col cols="12" v-if="selectedOption == 'Ugovor 24 meseca'" class="py-0">
       <v-row justify="center" no-gutters>
         <span v-html="item.prices.old_price_promo_text"></span>
       </v-row>
     </v-col>
-  </v-row>
+    </div>
 </template>
 
 <script>

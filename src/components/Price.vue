@@ -10,7 +10,7 @@
       </p>
       <p
         v-else
-        class="text-h4"
+        class="text-h5"
         :class="price_class"
       >
         <slot /> {{ valuta }}
@@ -30,6 +30,11 @@ export default {
   props: {
     keyPrice: {
       type: String,
+    },
+  },
+  computed: {
+    bPoint() {
+      return this.$vuetify.breakpoint;
     },
   },
 };
