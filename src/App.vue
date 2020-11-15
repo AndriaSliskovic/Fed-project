@@ -1,28 +1,33 @@
 <template>
   <v-app>
     <v-main>
-      <v-container fluid>
-            <v-progress-circular
-      indeterminate
-      color="primary"
-      v-if="!loaded"
-      class="centered"
-    ></v-progress-circular>
-        <v-row justify="end" id="select_contract" no-gutters class="pr-8">
+      <v-container>
+        <v-progress-circular
+          indeterminate
+          color="primary"
+          v-if="!loaded"
+          class="centered"
+        ></v-progress-circular>
+        <v-row justify="end" id="select_contract" no-gutters>
           <v-col
             cols="12"
             sm="4"
             lg="3"
             id="select_contract_length"
             v-if="loaded"
+            class="px-10"
           >
-            <v-select
-              :items="dataObject.contract_length.contract_length_options"
-              dense
-              solo
-              v-model="selectedOption"
-              background-color="secondary"
-            ></v-select>
+            <v-row justify="center">
+              <v-select
+                :items="dataObject.contract_length.contract_length_options"
+                dense
+                solo
+                v-model="selectedOption"
+                background-color="secondary"
+                color="primary"
+                filled
+              ></v-select>
+            </v-row>
           </v-col>
         </v-row>
 
@@ -44,7 +49,7 @@
                   :data="item.is_featured"
                   :height="containerHeights.recommendation"
                 ></Recommendation>
-                <v-divider v-if="item.is_featured"></v-divider>
+                <v-divider v-if="item.is_featured" class="mx-4"></v-divider>
               </div>
               <!-- // Recommendation -->
               <v-card color="secondary" flat>
@@ -75,7 +80,6 @@
                       :netCategory="netCategory"
                     ></NetSection>
                   </div>
-                  <v-divider></v-divider>
                   <!-- // Net category -->
                   <!-- Promotions -->
                   <div
@@ -83,14 +87,14 @@
                     :ref="`promotions-${item.id}`"
                     v-if="selectedOption == 'Ugovor 24 meseca'"
                   >
-                    <Promotions :img="item.promotions[0].promotion_image">
-                      <span
-                        v-html="item.promotions[0].promo_text"
-                        class="purple--text text-darken-2 font-italic font-weight-medium"
-                      ></span>
+                    <Promotions
+                      :img="item.promotions[0].promotion_image"
+                      :promotionText="item.promotions[0].promo_text"
+                      :height="containerHeights.promotions"
+                    >
                     </Promotions>
                   </div>
-                  <v-divider></v-divider>
+                  <v-divider class="mt-5"></v-divider>
                   <!-- // Promotions -->
                   <!-- Prices -->
                   <div id="prices" :ref="`prices-${item.id}`">
@@ -103,7 +107,11 @@
                   <!-- // Prices -->
                   <!-- Button -->
                   <div id="submitButton">
-                    <SubmitButton @submited="onSubmited">Naručite</SubmitButton>
+                    <SubmitButton @submited="onSubmited">
+                      <span class="submit_class text-capitalize">
+                        Naručite
+                      </span>
+                    </SubmitButton>
                   </div>
                 </v-card-text>
               </v-card>
@@ -166,6 +174,8 @@ export default {
         .then(() => {
           this.selectedOption = this.dataObject.contract_length.preselected_contract_length;
           this.formatToStrong();
+        })
+        .then(() => {
           const arrOfRefKeys = this.setRefsKeyArray();
           for (const iterator of arrOfRefKeys) {
             this.setRefsElements(iterator);
@@ -176,8 +186,8 @@ export default {
     formatToStrong() {
       this.dataObject.items.forEach((el) => {
         el.included.forEach((e) => {
-          const attribute=e.attributes.attribute_value
-          const newAttr=`<strong>${attribute}</strong>`
+          const attribute = e.attributes.attribute_value;
+          const newAttr = `<strong>${attribute}</strong>`;
           e.long_name = e.long_name.replace(attribute, newAttr);
         });
       });
@@ -261,5 +271,9 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.submit_class {
+  font-size: 18px;
+  line-height: 48px;
 }
 </style>

@@ -2,7 +2,7 @@
   <v-row justify="center" align="center" :style="{ height: setHeight }">
     <v-col cols="12">
       <p
-        class="text-h4 purple--text text-darken-2 font-weight-bold font-italic text-center"
+        class="text-h3 primary--text text-darken-2 font-weight-bold font-italic text-center text-line-height"
         :class="bPoint.lgAndDow ? 'text-h4' : 'text-h3'"
       >
         <slot />
@@ -33,4 +33,7 @@ export default {
 </script>
 
 <style  scoped>
+.text-line-height{
+  line-height: 48px;
+}
 </style>

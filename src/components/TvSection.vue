@@ -1,20 +1,15 @@
 <template>
-  <v-row align="center" :style="{ height: setHeight }">
-    <v-col cols="3">
-      <v-avatar>
+  <v-row justify="center" align="center" :style="{ height: setHeight }">
+    <v-col cols="2">
+      <v-avatar :size="bPoint.smAndUp?60:40">
         <img :src="tvCategory" alt="tv_category" />
       </v-avatar>
     </v-col>
-    <v-col cols="9">
+    <v-col cols="10">
       <template v-for="i in item.included">
-        <v-col
-          cols="12"
-          :key="i.id"
-          v-if="i.product_category == 'tv'"
-          class="pa-0"
-        >
-          <p v-html="i.long_name" class="mb-1" />
-        </v-col>
+        <ul :key="i.id" v-if="i.product_category == 'tv'">
+          <li v-html="i.long_name" class="main_text my-1" />
+        </ul>
       </template>
     </v-col>
   </v-row>
@@ -40,9 +35,16 @@ export default {
       }
       return this.height + "px";
     },
+    bPoint() {
+      return this.$vuetify.breakpoint;
+    },
   },
 };
 </script>
 
 <style  scoped>
+.main_text {
+  font-size: 16px;
+  line-height: 16px;
+}
 </style>
