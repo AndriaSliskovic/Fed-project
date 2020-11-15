@@ -8,7 +8,7 @@ export default new Vuetify({
     breakpoint: {
         thresholds: {
           xs: 321,
-          sm: 540,
+          sm: 430,
           md: 769,
           lg: 1367,
         },
@@ -17,8 +17,9 @@ export default new Vuetify({
     theme: {
         themes: {
             light: {
-                primary: '#7B1FA2',
-                secondary: colors.purple.lighten5,
+                primary: '#742d6c',
+                secondary: '#f8f4ec',
+                nettext:'#102542',
                 accent: '#82B1FF',
                 error: '#FF5252',
                 info: '#2196F3',
