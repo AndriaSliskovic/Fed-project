@@ -49,10 +49,14 @@
                   :data="item.is_featured"
                   :height="containerHeights.recommendation"
                 ></Recommendation>
-                <v-divider v-if="item.is_featured" class="mx-4"></v-divider>
               </div>
+              <v-divider v-if="item.is_featured" class="mx-4"></v-divider>
               <!-- // Recommendation -->
-              <v-card color="secondary" flat>
+              <v-card
+                color="secondary"
+                flat
+                :class="item.is_featured ? 'recomendation_exist' : ''"
+              >
                 <v-card-text>
                   <!-- Name -->
                   <div id="name" :ref="`name-${item.id}`">
@@ -60,7 +64,7 @@
                       {{ item.name }}
                     </Name>
                   </div>
-                  <v-divider></v-divider>
+                  <v-divider class="my-3"></v-divider>
                   <!--  // Name -->
                   <!-- TV section -->
                   <div id="tvSection" :ref="`tvSection-${item.id}`">
@@ -70,7 +74,7 @@
                       :tvCategory="tvCategory"
                     ></TvSection>
                   </div>
-                  <v-divider></v-divider>
+                  <v-divider class="my-3"></v-divider>
                   <!--// TV section -->
                   <!-- Net section -->
                   <div id="netSection" :ref="`netSection-${item.id}`">
@@ -94,7 +98,7 @@
                     >
                     </Promotions>
                   </div>
-                  <v-divider class="mt-5"></v-divider>
+                  <v-divider class="mb-3 mt-8"></v-divider>
                   <!-- // Promotions -->
                   <!-- Prices -->
                   <div id="prices" :ref="`prices-${item.id}`">
@@ -275,5 +279,8 @@ export default {
 .submit_class {
   font-size: 18px;
   line-height: 48px;
+}
+.recomendation_exist {
+  border-radius: 0px 0px 10px 10px !important;
 }
 </style>

@@ -3,11 +3,13 @@
     :color="!data ? 'white' : 'secondary'"
     :style="{ height: setHeight, borderStyle: 'none' }"
     flat
-    class="card_class"
+    class="recomendation_class"
   >
     <v-col cols="12" v-if="data">
       <v-row justify="center">
-        <p class="main_text primary--text font-weight-bold font-italic my-0">Preporučujemo</p>
+        <p class="main_text primary--text font-weight-bold font-italic my-0">
+          Preporučujemo
+        </p>
       </v-row>
     </v-col>
   </v-card>
@@ -34,13 +36,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-$card-border-radius:0px;
 .main_text {
   font-size: 15px;
   line-height: 27px;
 }
-.card_class{
-  border-bottom-left-radius:0px;
-  
+.recomendation_class {
+  border-radius: 10px 10px 0px 0px !important;
 }
 </style>
