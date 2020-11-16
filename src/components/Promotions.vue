@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       imgRatio: 1.2,
-      cardRatio: 0.8,
+      cardRatio: 0.9,
     };
   },
   props: {
